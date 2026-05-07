@@ -1,10 +1,22 @@
 import React from 'react'
+import Hero from '../components/landing/Hero'
+import Problem from '../components/landing/Problem'
+import Features from '../components/landing/Features'
+import HowItWorks from '../components/landing/HowItWorks'
+import SavingsExamples from '../components/landing/SavingsExamples'
+import CTA from '../components/landing/CTA'
+import FAQ from '../components/landing/FAQ'
 
 export default function Home() {
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-2xl font-semibold">AI Spend Audit</h1>
-      <p className="mt-2 text-muted-foreground">Welcome — your dashboard will appear here.</p>
+    <main className="overflow-hidden">
+      <Hero />
+      <Problem />
+      <Features />
+      <HowItWorks />
+      <SavingsExamples />
+      <CTA />
+      <FAQ />
     </main>
   )
 }
