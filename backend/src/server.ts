@@ -6,6 +6,8 @@ import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
 import { json, urlencoded } from 'express'
 import { router as healthRouter } from './routes/health'
+import { router as testDbRouter } from './routes/testDb'
+import { router as testDbSimpleRouter } from './routes/testDbSimple'
 import { errorHandler } from './middleware/errorHandler'
 
 const app = express()
@@ -27,6 +29,8 @@ const limiter = rateLimit({
 app.use(limiter)
 
 app.use('/health', healthRouter)
+app.use('/test', testDbRouter)
+app.use('/test-db', testDbSimpleRouter)
 
 app.use(errorHandler)
 
