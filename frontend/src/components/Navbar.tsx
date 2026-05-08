@@ -20,10 +20,10 @@ export default function Navbar() {
             <button className="hidden sm:flex items-center gap-1 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
               Sign in
             </button>
-            <button className="hidden sm:flex items-center gap-1 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Link to="/audit" className="hidden sm:flex items-center gap-1 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
               Get Started
               <ChevronRight size={16} />
-            </button>
+            </Link>
             <ThemeToggle />
           </div>
         </div>

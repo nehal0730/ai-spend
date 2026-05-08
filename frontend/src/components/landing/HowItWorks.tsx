@@ -1,6 +1,5 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
 
 const steps = [
   {
@@ -30,30 +29,30 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
+      staggerChildren: 0.12,
       delayChildren: 0.1
     }
   }
 }
 
 const stepVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 }
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 md:py-32 bg-white dark:bg-slate-900">
-      <div className="container px-4 md:px-0">
+    <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-800">
+      <div className="container px-4 md:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="text-center max-w-2xl mx-auto mb-16 md:mb-20"
         >
-          <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2">HOW IT WORKS</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <p className="text-xs md:text-sm font-bold text-blue-600 dark:text-blue-400 mb-3 uppercase tracking-widest">How It Works</p>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 leading-tight tracking-tight">
             Get started in 4 simple steps.
           </h2>
         </motion.div>
@@ -63,26 +62,21 @@ export default function HowItWorks() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto"
+          className="grid md:grid-cols-2 gap-8 md:gap-10 max-w-5xl mx-auto"
         >
           {steps.map((step, i) => (
             <motion.div key={i} variants={stepVariants} className="relative">
-              <div className="flex gap-4">
+              <div className="flex gap-3 md:gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-lg">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/40 dark:to-indigo-900/40 text-blue-700 dark:text-blue-300 font-black text-xl">
                     {step.number}
                   </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-300">{step.description}</p>
+                <div className="flex-1 pt-2">
+                  <h3 className="text-lg md:text-xl font-bold mb-2 text-slate-900 dark:text-white">{step.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed">{step.description}</p>
                 </div>
               </div>
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute -right-12 top-12">
-                  <ArrowRight className="w-6 h-6 text-slate-300 dark:text-slate-600" />
-                </div>
-              )}
             </motion.div>
           ))}
         </motion.div>
