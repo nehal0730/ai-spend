@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-05-10T00:00:00Z",
+  "input": {
+    "monthlySpend": 12000,
+    "seatCount": 10,
+    "teamSize": 12,
+    "primaryUseCase": "backend",
+    "currentPlan": "growth",
+    "tools": [
+      {
+        "provider": "Acme",
+        "toolName": "AcmeDB",
+        "monthlySpend": 6000,
+        "activeSeats": 10
+      },
+      {
+        "provider": "Zoom",
+        "toolName": "ZoomPro",
+        "monthlySpend": 2000,
+        "activeSeats": 10
+      }
+    ]
+  },
+  "summary": {
+    "currentSpend": 12000,
+    "toolCount": 2,
+    "avgCostPerTool": 6000,
+    "costPerTeamMember": 1000,
+    "costPerActiveUser": 1000,
+    "topExpensiveTool": {
+      "name": "AcmeDB",
+      "spend": 6000,
+      "percentage": 50
+    },
+    "spendDistribution": {
+      "byCategory": {},
+      "concentration": "high"
+    }
+  },
+  "recommendations": [],
+  "totalEstimatedSavings": 0,
+  "auditMetadata": {
+    "rulesEvaluated": 10,
+    "rulesApplied": 0,
+    "highConfidenceRecommendations": 0
+  }
+}

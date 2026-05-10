@@ -69,10 +69,11 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
               </div>
 
               <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                <FormField 
-                  id={`tools.${index}.provider`} 
-                  label={<div className="flex items-center gap-2"><Zap className="h-4 w-4 text-blue-400" />Provider</div>} 
-                  error={getToolErrorMessage(rowErrors?.provider)}>
+                <FormField
+                  id={`tools.${index}.provider`}
+                  label={<div className="flex items-center gap-2"><Zap className="h-4 w-4 text-blue-400" />Provider</div>}
+                  error={getToolErrorMessage(rowErrors?.provider)}
+                >
                   <Controller
                     control={control}
                     name={`tools.${index}.provider`}
@@ -92,10 +93,11 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                   />
                 </FormField>
 
-                <FormField 
-                  id={`tools.${index}.toolName`} 
-                  label={<div className="flex items-center gap-2"><Tag className="h-4 w-4 text-amber-400" />Tool name</div>} 
-                  error={getToolErrorMessage(rowErrors?.toolName)}>
+                <FormField
+                  id={`tools.${index}.toolName`}
+                  label={<div className="flex items-center gap-2"><Tag className="h-4 w-4 text-amber-400" />Tool name</div>}
+                  error={getToolErrorMessage(rowErrors?.toolName)}
+                >
                   <Controller
                     control={control}
                     name={`tools.${index}.toolName`}
@@ -111,10 +113,11 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                   />
                 </FormField>
 
-                <FormField 
-                  id={`tools.${index}.monthlySpend`} 
-                  label={<div className="flex items-center gap-2"><DollarSign className="h-4 w-4 text-green-400" />Monthly spend</div>} 
-                  error={getToolErrorMessage(rowErrors?.monthlySpend)}>
+                <FormField
+                  id={`tools.${index}.monthlySpend`}
+                  label={<div className="flex items-center gap-2"><DollarSign className="h-4 w-4 text-green-400" />Monthly spend</div>}
+                  error={getToolErrorMessage(rowErrors?.monthlySpend)}
+                >
                   <Controller
                     control={control}
                     name={`tools.${index}.monthlySpend`}
@@ -133,10 +136,11 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                   />
                 </FormField>
 
-                <FormField 
-                  id={`tools.${index}.activeSeats`} 
-                  label={<div className="flex items-center gap-2"><Users className="h-4 w-4 text-purple-400" />Active seats</div>} 
-                  error={getToolErrorMessage(rowErrors?.activeSeats)}>
+                <FormField
+                  id={`tools.${index}.activeSeats`}
+                  label={<div className="flex items-center gap-2"><Users className="h-4 w-4 text-purple-400" />Active seats</div>}
+                  error={getToolErrorMessage(rowErrors?.activeSeats)}
+                >
                   <Controller
                     control={control}
                     name={`tools.${index}.activeSeats`}

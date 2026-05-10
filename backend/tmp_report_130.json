@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-05-11T00:00:00Z",
+  "input": {
+    "monthlySpend": 130,
+    "seatCount": 5,
+    "teamSize": 5,
+    "primaryUseCase": "chatbot",
+    "currentPlan": "starter",
+    "tools": [
+      { "provider": "Anthropic", "toolName": "Claude", "monthlySpend": 100, "activeSeats": 5 },
+      { "provider": "OpenAI", "toolName": "GPT", "monthlySpend": 30, "activeSeats": 5 }
+    ]
+  },
+  "summary": {
+    "currentSpend": 130,
+    "toolCount": 2,
+    "avgCostPerTool": 65,
+    "costPerTeamMember": 26,
+    "costPerActiveUser": 26,
+    "topExpensiveTool": { "name": "Anthropic", "spend": 100, "percentage": 76.92307692307693 },
+    "spendDistribution": { "byCategory": {}, "concentration": "high" }
+  },
+  "recommendations": [
+    {
+      "id": "r1",
+      "category": "usage-optimization",
+      "priority": 1,
+      "title": "Trim idle usage",
+      "description": "Reduce unused requests.",
+      "estimatedSavings": 12,
+      "implementation": "Set quotas",
+      "reasoning": "Low utilization detected",
+      "riskLevel": "low",
+      "timeframe": "short-term",
+      "confidence": "high"
+    }
+  ],
+  "totalEstimatedSavings": 12,
+  "auditMetadata": {
+    "rulesEvaluated": 8,
+    "rulesApplied": 1,
+    "highConfidenceRecommendations": 1
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import ThemeToggle from '../lib/ThemeToggle'
+import ThemeToggle from '../lib/theme/ThemeToggle'
 import { ChevronRight } from 'lucide-react'
 
 export default function Navbar() {

@@ -3,7 +3,7 @@ import clsx from 'clsx'
 
 type FormFieldProps = {
   id: string
-  label: string
+  label: React.ReactNode
   hint?: string
   error?: string
   className?: string

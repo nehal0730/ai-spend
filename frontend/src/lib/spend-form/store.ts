@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { defaultAISpendFormValues, type AISpendFormValues } from './spend-form'
+import { defaultAISpendFormValues, type AISpendFormValues } from './index'
 
 type SpendFormState = {
   draft: AISpendFormValues
