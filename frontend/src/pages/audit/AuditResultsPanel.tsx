@@ -61,7 +61,7 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.35 }}
-      className="group rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-5 shadow-xl shadow-slate-950/30 backdrop-blur-xl"
+      className="group rounded-[1.75rem] bg-surface p-5 shadow-[0_18px_50px_rgba(15,23,42,0.10)] backdrop-blur-xl dark:shadow-[0_18px_50px_rgba(2,6,23,0.45)]"
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-4 lg:flex-1">
@@ -70,7 +70,7 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
               <Icon className="h-3 w-3" />
               {meta.label}
             </span>
-            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
+            <span className="inline-flex items-center rounded-full border border-surface bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-soft dark:bg-slate-950/60 dark:text-slate-300">
               Priority {recommendation.priority}
             </span>
             <span className="inline-flex items-center rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
@@ -79,17 +79,17 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
           </div>
 
           <div>
-            <h3 className="text-xl font-black tracking-tight text-white">{recommendation.title}</h3>
-            <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-300">{recommendation.description}</p>
+            <h3 className="text-xl font-black tracking-tight text-primary dark:text-white">{recommendation.title}</h3>
+            <p className="mt-1 max-w-3xl text-sm leading-6 text-muted dark:text-slate-300">{recommendation.description}</p>
           </div>
         </div>
 
         <Card className="min-w-[220px] lg:max-w-xs self-start">
-          <div className="flex items-center gap-2 text-slate-300">
-            <Sparkles className="h-4 w-4 text-cyan-300" />
+          <div className="flex items-center gap-2 text-muted">
+            <Sparkles className="h-4 w-4 text-cyan-600 dark:text-cyan-300" />
             <p className="text-xs font-bold uppercase tracking-[0.2em]">Why this triggered</p>
           </div>
-          <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+          <ul className="mt-3 space-y-2 text-sm leading-6 text-muted dark:text-slate-300">
             {highlights.map(line => (
               <li key={line} className="flex gap-2">
                 <ChevronRight className="mt-1 h-3.5 w-3.5 flex-none text-cyan-300" />
@@ -113,11 +113,11 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">
         <Card>
-          <div className="flex items-center gap-2 text-slate-200">
-            <BarChart3 className="h-4 w-4 text-blue-300" />
+          <div className="flex items-center gap-2 text-muted">
+            <BarChart3 className="h-4 w-4 text-cyan-600 dark:text-blue-300" />
             <p className="text-xs font-bold uppercase tracking-[0.2em]">Implementation</p>
           </div>
-          <ul className="mt-3 space-y-2 text-sm text-slate-300">
+          <ul className="mt-3 space-y-2 text-sm text-muted dark:text-slate-300">
             {steps.map(step => (
               <li key={step} className="flex gap-2">
                 <span className="mt-2 h-1.5 w-1.5 rounded-full bg-blue-400" />
@@ -128,11 +128,11 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
         </Card>
 
         <Card>
-          <div className="flex items-center gap-2 text-slate-200">
-            <Clock3 className="h-4 w-4 text-amber-300" />
+          <div className="flex items-center gap-2 text-muted">
+            <Clock3 className="h-4 w-4 text-amber-600 dark:text-amber-300" />
             <p className="text-xs font-bold uppercase tracking-[0.2em]">Reasoning snapshot</p>
           </div>
-          <div className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
+          <div className="mt-3 space-y-2 text-sm leading-6 text-muted dark:text-slate-300">
             {recommendation.reasoning
               .split('\n')
               .map(line => line.trim())
@@ -152,11 +152,11 @@ export default function AuditResultsPanel({ report }: Props) {
   const savingsRate = report.summary.currentSpend > 0 ? (report.totalEstimatedSavings / report.summary.currentSpend) * 100 : 0
 
   return (
-    <section className="rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.98))] p-5 shadow-[0_20px_70px_rgba(2,6,23,0.55)] md:p-6 lg:p-8">
+    <section className="rounded-[2.25rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(241,245,249,0.98))] p-5 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:p-6 lg:p-8 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.98))] dark:shadow-[0_20px_70px_rgba(2,6,23,0.55)]">
       <div className="flex flex-col gap-5">
         <div className="space-y-3">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-white md:text-3xl whitespace-nowrap">Audit results</h2>
+            <h2 className="whitespace-nowrap text-2xl font-black tracking-tight text-primary md:text-3xl dark:text-white">Audit results</h2>
           </div>
         </div>
 
@@ -198,8 +198,8 @@ export default function AuditResultsPanel({ report }: Props) {
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-300">
               <BadgeCheck className="h-6 w-6" />
             </div>
-            <h3 className="mt-4 text-xl font-black text-white">No major issues detected</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
+            <h3 className="mt-4 text-xl font-black text-primary dark:text-white">No major issues detected</h3>
+            <p className="mt-2 text-sm leading-6 text-muted dark:text-slate-300">
               Your current spend profile does not trigger any of the deterministic risk rules we defined.
             </p>
           </div>

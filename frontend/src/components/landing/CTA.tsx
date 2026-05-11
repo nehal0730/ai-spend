@@ -53,7 +53,7 @@ export default function CTA() {
               Get Started Free
               <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a href="#faq" className="px-8 md:px-10 py-4 md:py-5 border-2 border-white text-white hover:bg-white/10 rounded-xl font-bold transition-all duration-300 flex items-center gap-2 w-full sm:w-auto justify-center md:text-lg">
+            <a href="#faq" className="px-8 md:px-10 py-4 md:py-5 rounded-xl bg-white/10 text-white shadow-[0_14px_36px_rgba(15,23,42,0.18)] transition-all duration-300 flex items-center gap-2 w-full sm:w-auto justify-center md:text-lg hover:bg-white/15">
               Schedule Demo
               <ArrowRight size={20} />
             </a>

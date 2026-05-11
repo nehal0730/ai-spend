@@ -55,13 +55,10 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <motion.div
-      variants={itemVariants}
-      className="border-b border-slate-200 dark:border-slate-700 last:border-b-0"
-    >
+    <motion.div variants={itemVariants} className="last:border-b-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full py-6 md:py-7 px-4 md:px-6 flex items-start justify-between gap-4 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors text-left group"
+        className="group flex w-full items-start justify-between gap-4 px-4 py-6 text-left transition-colors hover:bg-cyan-50/50 dark:hover:bg-slate-800/30 md:px-6 md:py-7"
       >
         <span className="text-lg md:text-xl font-semibold text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           {question}
@@ -94,7 +91,7 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 
 export default function FAQ() {
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-800">
+    <section className="bg-gradient-to-b from-white to-slate-50 py-16 md:py-24 lg:py-32 dark:from-slate-900 dark:to-slate-800">
       <div className="container px-4 md:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -115,7 +112,7 @@ export default function FAQ() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="max-w-3xl mx-auto border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-800/50 backdrop-blur-sm"
+          className="mx-auto max-w-3xl overflow-hidden rounded-2xl bg-white shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:bg-slate-800/50 dark:shadow-[0_20px_60px_rgba(2,6,23,0.3)] backdrop-blur-sm"
         >
           {faqs.map((faq, i) => (
             <FAQItem key={i} question={faq.question} answer={faq.answer} index={i} />

@@ -69,7 +69,7 @@ export default function Problem() {
               <motion.div
                 key={i}
                 variants={itemVariants}
-                className="group bg-white dark:bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-slate-200/50 dark:border-slate-700/50 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-lg dark:hover:shadow-lg dark:hover:shadow-blue-900/20 backdrop-blur-sm"
+                className="group rounded-2xl bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(15,23,42,0.08)] dark:bg-slate-800/50 dark:hover:shadow-[0_18px_50px_rgba(2,6,23,0.35)] md:p-8 backdrop-blur-sm"
               >
                 <div className="inline-flex p-3 rounded-xl bg-blue-50 dark:bg-blue-900/30 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors mb-4">
                   <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />

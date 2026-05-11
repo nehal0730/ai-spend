@@ -5,7 +5,7 @@ import { ChevronRight } from 'lucide-react'
 
 export default function Navbar() {
   return (
-    <header className="border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 bg-white/90 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm dark:bg-slate-900/80 dark:shadow-[0_8px_30px_rgba(2,6,23,0.35)]">
       <div className="container px-4 md:px-0 flex items-center justify-between h-16">
         <Link to="/" className="text-lg font-semibold hover:opacity-80 transition-opacity">
           AI Spend
@@ -17,10 +17,10 @@ export default function Navbar() {
             <a href="#faq" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</a>
           </nav>
           <div className="flex items-center gap-3">
-            <button className="hidden sm:flex items-center gap-1 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
+            <button className="hidden sm:flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-900/20">
               Sign in
             </button>
-            <Link to="/audit" className="hidden sm:flex items-center gap-1 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Link to="/audit" className="hidden sm:flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:from-cyan-600 hover:to-indigo-600">
               Get Started
               <ChevronRight size={16} />
             </Link>

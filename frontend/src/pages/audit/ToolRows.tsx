@@ -25,13 +25,13 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
-          <Zap className="h-3.5 w-3.5 text-amber-400" />
-          <h3 className="text-sm font-bold text-white">Your tools</h3>
+          <Zap className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400" />
+          <h3 className="text-sm font-bold text-primary dark:text-white">Your tools</h3>
         </div>
         <button
           type="button"
           onClick={() => append(createToolRow())}
-          className="inline-flex items-center gap-1 rounded-lg border border-blue-500/30 bg-blue-500/10 px-2.5 py-1.5 text-xs font-semibold text-blue-300 transition-all hover:bg-blue-500/20 hover:border-blue-500/50 whitespace-nowrap"
+          className="inline-flex items-center gap-1 whitespace-nowrap rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1.5 text-xs font-semibold text-cyan-700 transition-all hover:border-cyan-500/40 hover:bg-cyan-500/15 dark:text-cyan-300"
         >
           <Plus className="h-3 w-3" />
           Add
@@ -45,12 +45,12 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
           return (
             <div
               key={field.fieldId}
-              className="rounded-lg border border-white/10 bg-gradient-to-br from-slate-900/40 to-slate-800/30 p-4 hover:border-blue-500/30 transition-all backdrop-blur"
+              className="rounded-lg border border-surface bg-gradient-to-br from-white to-slate-50 p-4 shadow-[0_10px_26px_rgba(15,23,42,0.05)] backdrop-blur transition-all hover:border-cyan-500/20 dark:border-white/10 dark:from-slate-900/40 dark:to-slate-800/30 dark:hover:border-blue-500/30 dark:shadow-[0_10px_26px_rgba(2,6,23,0.2)]"
             >
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <Tag className="h-3.5 w-3.5 text-blue-400" />
-                  <p className="text-xs font-bold text-blue-300 uppercase tracking-widest">Tool {index + 1}</p>
+                  <Tag className="h-3.5 w-3.5 text-cyan-600 dark:text-blue-400" />
+                  <p className="text-xs font-bold uppercase tracking-widest text-cyan-700 dark:text-blue-300">Tool {index + 1}</p>
                 </div>
                 <button
                   type="button"
@@ -59,8 +59,8 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                   className={clsx(
                     'inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all',
                     fields.length === 1
-                      ? 'cursor-not-allowed bg-slate-700/40 text-slate-500'
-                      : 'bg-rose-500/10 text-rose-300 border border-rose-500/20 hover:bg-rose-500/20 hover:border-rose-500/40'
+                      ? 'cursor-not-allowed bg-slate-100 text-slate-400 dark:bg-slate-700/40 dark:text-slate-500'
+                      : 'border border-rose-500/20 bg-rose-500/10 text-rose-700 hover:border-rose-500/40 hover:bg-rose-500/20 dark:text-rose-300'
                   )}
                 >
                   <Trash2 className="h-3 w-3" />
@@ -81,7 +81,7 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                       <select
                         {...providerField}
                         id={`tools.${index}.provider`}
-                        className="block w-full rounded-xl border border-slate-600 bg-slate-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="block w-full rounded-xl border border-surface bg-white text-primary shadow-sm focus:border-cyan-500 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                       >
                         {aiToolProviders.map((provider) => (
                           <option key={provider} value={provider}>
@@ -106,7 +106,7 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                         {...nameField}
                         id={`tools.${index}.toolName`}
                         type="text"
-                        className="block w-full rounded-xl border border-slate-600 bg-slate-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="block w-full rounded-xl border border-surface bg-white text-primary shadow-sm focus:border-cyan-500 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         placeholder="e.g. GPT-4.1, Claude Code"
                       />
                     )}
@@ -129,7 +129,7 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                         inputMode="decimal"
                         min={0}
                         step="0.01"
-                        className="block w-full rounded-xl border border-slate-600 bg-slate-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="block w-full rounded-xl border border-surface bg-white text-primary shadow-sm focus:border-cyan-500 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         onChange={(event) => spendField.onChange(event.target.value === '' ? '' : Number(event.target.value))}
                       />
                     )}
@@ -151,7 +151,7 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                         type="number"
                         min={1}
                         step={1}
-                        className="block w-full rounded-xl border border-slate-600 bg-slate-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="block w-full rounded-xl border border-surface bg-white text-primary shadow-sm focus:border-cyan-500 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         onChange={(event) => seatsField.onChange(event.target.value === '' ? '' : Number(event.target.value))}
                       />
                     )}
@@ -159,9 +159,9 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                 </FormField>
               </div>
 
-              <div className="mt-6 flex items-center justify-between rounded-xl border border-blue-500/20 bg-blue-500/10 px-4 py-3 text-sm">
-                <span className="text-slate-300 flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-blue-400" />
+              <div className="mt-6 flex items-center justify-between rounded-xl border border-cyan-500/15 bg-cyan-50 px-4 py-3 text-sm dark:border-blue-500/20 dark:bg-blue-500/10">
+                <span className="flex items-center gap-2 text-muted dark:text-slate-300">
+                  <Zap className="h-4 w-4 text-cyan-600 dark:text-blue-400" />
                   Auto-saved as you type
                 </span>
                 <button
@@ -175,7 +175,7 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                       activeSeats: field.activeSeats
                     })
                   }
-                  className="font-semibold text-blue-300 hover:text-blue-200 transition-colors"
+                  className="font-semibold text-cyan-700 transition-colors hover:text-cyan-600 dark:text-blue-300 dark:hover:text-blue-200"
                 >
                   Normalize
                 </button>

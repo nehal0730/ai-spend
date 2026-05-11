@@ -24,10 +24,10 @@ export default function PlanSelector({ value, error, onChange }: PlanSelectorPro
               aria-checked={isSelected}
               onClick={() => onChange(plan.value)}
               className={clsx(
-                'rounded-2xl border p-4 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900',
+                'rounded-2xl p-4 text-left transition-all duration-200 shadow-[0_10px_28px_rgba(15,23,42,0.06)] ring-1 ring-slate-200/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:shadow-[0_10px_28px_rgba(2,6,23,0.25)] dark:ring-white/5 dark:focus-visible:ring-offset-slate-900',
                 isSelected
-                  ? 'border-blue-500 bg-blue-50 shadow-sm dark:border-blue-400 dark:bg-blue-500/10'
-                  : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-blue-500/50 dark:hover:bg-slate-800'
+                  ? 'bg-blue-50 dark:bg-blue-500/10'
+                  : 'bg-white hover:bg-slate-50 dark:bg-slate-800/60 dark:hover:bg-slate-800'
               )}
             >
               <div className="flex items-start justify-between gap-3">

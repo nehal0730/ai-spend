@@ -5,7 +5,7 @@ import { ChevronRight, Sparkles } from 'lucide-react'
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-16 pb-8 md:pt-0 md:pb-0">
+    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden pt-16 pb-8 md:pt-0 md:pb-0">
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 -z-10" />
       
@@ -25,7 +25,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/80 dark:bg-blue-900/30 border border-blue-200/50 dark:border-blue-800/50 mb-6 backdrop-blur-sm"
+            className="mb-6 inline-flex items-center gap-2 rounded-full bg-cyan-100/80 px-4 py-2 backdrop-blur-sm dark:bg-cyan-900/30"
           >
             <Sparkles size={16} className="text-blue-600 dark:text-blue-400" />
             <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Introducing AI Spend Auditor</span>
@@ -59,11 +59,11 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6"
           >
-            <Link to="/audit" className="group px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl hover:shadow-blue-500/30 active:scale-95 w-full sm:w-auto justify-center md:text-base">
+            <Link to="/audit" className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all duration-300 active:scale-95 hover:from-cyan-600 hover:to-indigo-600 hover:shadow-xl hover:shadow-cyan-500/25 sm:w-auto md:px-8 md:py-4 md:text-base">
               Get Started Free
               <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <a href="#features" className="px-6 md:px-8 py-3 md:py-4 border-2 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 rounded-xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300 w-full sm:w-auto md:text-base text-center">
+            <a href="#features" className="w-full rounded-xl bg-white px-6 py-3 text-center font-semibold text-primary shadow-[0_10px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:bg-slate-50 dark:bg-slate-800/60 dark:text-slate-100 dark:hover:bg-slate-800/80 sm:w-auto md:px-8 md:py-4 md:text-base">
               Explore features
             </a>
           </motion.div>

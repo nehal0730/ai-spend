@@ -75,10 +75,10 @@ export default function SavingsExamples() {
             <motion.div
               key={i}
               variants={cardVariants}
-              className={`group relative rounded-2xl border transition-all duration-300 ${
+              className={`group relative rounded-2xl transition-all duration-300 ${
                 example.featured
-                  ? 'md:scale-105 border-blue-300/50 dark:border-blue-800/50 bg-gradient-to-br from-white to-blue-50/50 dark:from-slate-800 dark:to-blue-950/30 shadow-xl dark:shadow-lg dark:shadow-blue-900/30'
-                  : 'border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800/30 hover:shadow-lg dark:hover:shadow-lg dark:hover:shadow-blue-900/20'
+                  ? 'md:scale-105 bg-gradient-to-br from-white to-cyan-50/60 shadow-xl dark:from-slate-800 dark:to-blue-950/30 dark:shadow-lg dark:shadow-blue-900/30'
+                  : 'bg-white shadow-[0_14px_40px_rgba(15,23,42,0.06)] dark:bg-slate-800/30 dark:hover:shadow-[0_18px_50px_rgba(2,6,23,0.25)]'
               }`}
             >
               {example.featured && (
@@ -110,7 +110,7 @@ export default function SavingsExamples() {
                   </div>
                 </div>
                 
-                <div className="pt-8 border-t border-slate-200/50 dark:border-slate-700/50">
+                <div className="pt-8">
                   <div className="flex items-center gap-2">
                     <TrendingDown className="h-5 w-5 text-green-600 dark:text-green-400" />
                     <p className="text-base md:text-lg font-bold text-green-600 dark:text-green-400">
