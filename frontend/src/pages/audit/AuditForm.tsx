@@ -60,7 +60,7 @@ export default function AuditForm() {
   const updatedAt = useSpendFormStore((state) => state.updatedAt)
   const setDraft = useSpendFormStore((state) => state.setDraft)
   const resetDraft = useSpendFormStore((state) => state.resetDraft)
-  const setLatestReport = useAuditResultsStore((state) => state.setLatestReport)
+  const setLatestResult = useAuditResultsStore((state) => state.setLatestResult)
   const clearLatestReport = useAuditResultsStore((state) => state.clearLatestReport)
   const [auditError, setAuditError] = useState<string | null>(null)
   const [isRunningAudit, setIsRunningAudit] = useState(false)
@@ -119,7 +119,7 @@ export default function AuditForm() {
       const result = await runRemoteAudit(values)
 
       if (result.success) {
-        setLatestReport(result.report)
+        setLatestResult(result.data.report, result.data.share)
         navigate('/audit/results')
         return
       }

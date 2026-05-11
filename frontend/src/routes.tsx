@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import AuditPage from './pages/audit/AuditPage'
 import AuditResultsPage from './pages/audit/results/AuditResultsPage'
+import ShareReportPage from './pages/share/ShareReportPage'
 import Layout from './components/Layout'
 
 export default function AppRoutes() {
@@ -12,8 +13,8 @@ export default function AppRoutes() {
         <Route index element={<Home />} />
         <Route path="audit" element={<AuditPage />} />
         <Route path="audit/results" element={<AuditResultsPage />} />
-        {/* future routes: /audits, /audits/:id, /team, /share/:token */}
       </Route>
+      <Route path="share/:shareId" element={<ShareReportPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

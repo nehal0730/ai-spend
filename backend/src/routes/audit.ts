@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { auditEngine } from '../lib/audit-engine'
 import { AuditInput } from '../lib/audit-engine/types'
 import { generateAiSummary } from '../lib/ai/gemini'
+import { createPublicAuditShare } from '../lib/share/service'
 
 const toolSchema = z.object({
   provider: z.string().min(1),
@@ -22,7 +23,7 @@ const auditRequestSchema = z.object({
 
 const router = Router()
 
-router.post('/analyze', (req, res) => {
+router.post('/analyze', async (req, res) => {
   const parsed = auditRequestSchema.safeParse(req.body)
   if (!parsed.success) {
     return res.status(400).json({
@@ -49,7 +50,14 @@ router.post('/analyze', (req, res) => {
   }
 
   const report = auditEngine.audit(input)
-  return res.json(report)
+  try {
+    const share = await createPublicAuditShare(report)
+    return res.json({ report, share })
+  } catch (error: any) {
+    return res.status(500).json({
+      error: error?.message || 'Could not publish share report'
+    })
+  }
 })
 
 export { router as auditRouter }

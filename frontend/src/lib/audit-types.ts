@@ -67,3 +67,57 @@ export interface AuditReport {
     highConfidenceRecommendations: number
   }
 }
+
+export interface AuditShareLink {
+  shareId: string
+  publicUrl: string
+  frontendUrl?: string
+}
+
+export interface AnalyzeAuditResponse {
+  report: AuditReport
+  share: AuditShareLink
+}
+
+export interface PublicRecommendation {
+  category: RecommendationCategory
+  priority: number
+  title: string
+  description: string
+  estimatedSavings: number
+  implementation: string
+  reasoning: string
+  riskLevel: 'low' | 'medium' | 'high'
+  timeframe: 'immediate' | 'short-term' | 'long-term'
+  confidence: 'high' | 'medium' | 'low'
+}
+
+export interface PublicAuditSharePayload {
+  shareId: string
+  generatedAt: string
+  title: string
+  optimizationSummary: string
+  description: string
+  monthlySpend: number
+  annualSpend: number
+  totalEstimatedSavings: number
+  annualEstimatedSavings: number
+  toolCount: number
+  recommendationsCount: number
+  highImpactRecommendationCount: number
+  topTool: {
+    name: string
+    spend: number
+    percentage: number
+  }
+  summary: AuditSummary
+  recommendations: PublicRecommendation[]
+}
+
+export interface SharedAuditApiResponse {
+  shareId: string
+  title: string
+  description: string
+  publishedAt: string
+  payload: PublicAuditSharePayload
+}

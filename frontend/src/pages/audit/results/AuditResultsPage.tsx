@@ -15,13 +15,18 @@ function formatMoney(amount: number): string {
 
 export default function AuditResultsPage() {
   const report = useAuditResultsStore((state) => state.latestReport)
+  const latestShare = useAuditResultsStore((state) => state.latestShare)
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle')
   const [aiSummary, setAiSummary] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiFallback, setAiFallback] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
 
-  const resultsUrl = useMemo(() => `${window.location.origin}/audit/results`, [])
+  const resultsUrl = useMemo(() => {
+    if (latestShare?.frontendUrl) return latestShare.frontendUrl
+    if (latestShare?.publicUrl) return latestShare.publicUrl
+    return `${window.location.origin}/audit/results`
+  }, [latestShare?.frontendUrl, latestShare?.publicUrl])
   const generatedOn = report ? new Date(report.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
   const topToolShare = report?.summary.topExpensiveTool.percentage ?? 0
 
@@ -99,7 +104,7 @@ export default function AuditResultsPage() {
                 className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-700 transition-all hover:border-cyan-300/30 hover:bg-cyan-400/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:text-cyan-100 dark:focus-visible:ring-offset-slate-950"
               >
                 <Copy className="h-4 w-4" />
-                {copyState === 'copied' ? 'Copied results link' : 'Copy results link'}
+                {copyState === 'copied' ? 'Copied share link' : 'Copy share link'}
               </button>
             </div>
           </div>
@@ -107,7 +112,7 @@ export default function AuditResultsPage() {
           <ResultsHero report={report} />
 
           <div className="mt-8 grid gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-7 flex flex-col gap-6">
+            <div className="lg:col-span-7 flex flex-col gap-5">
               <section className="rounded-[2rem] border border-surface bg-surface p-4 shadow-2xl shadow-slate-950/10 backdrop-blur-xl md:p-6">
                 <div className="mb-4 text-muted">
                   <p className="text-xs font-bold uppercase tracking-[0.2em]">Recommendation explanations</p>

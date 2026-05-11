@@ -9,6 +9,7 @@ import { router as healthRouter } from './routes/health'
 import { router as testDbRouter } from './routes/testDb'
 import { router as testDbSimpleRouter } from './routes/testDbSimple'
 import { auditRouter } from './routes/audit'
+import { shareApiRouter, sharePageRouter } from './routes/share'
 import { errorHandler } from './middleware/errorHandler'
 
 const app = express()
@@ -33,6 +34,8 @@ app.use('/health', healthRouter)
 app.use('/test', testDbRouter)
 app.use('/test-db', testDbSimpleRouter)
 app.use('/audit', auditRouter)
+app.use('/api/share', shareApiRouter)
+app.use('/share', sharePageRouter)
 
 app.use(errorHandler)
 

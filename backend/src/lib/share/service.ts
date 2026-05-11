@@ -1,0 +1,139 @@
+import { randomBytes } from 'crypto'
+import { Resvg } from '@resvg/resvg-js'
+import supabase from '../supabase'
+import { AuditReport } from '../audit-engine/types'
+import { buildOgImageUrl, buildShareMetadata, buildFrontendShareUrl } from './metadata'
+import { toPublicAuditSharePayload } from './sanitize'
+import { PublicAuditSharePayload, PublicShareRecord } from './types'
+
+const TABLE_NAME = 'public_audit_shares'
+
+function createShareId(): string {
+  return randomBytes(9).toString('base64url')
+}
+
+function mapRow(row: any): PublicShareRecord {
+  return {
+    shareId: row.share_id,
+    title: row.title,
+    description: row.description,
+    ogImageUrl: row.og_image_url,
+    reportPayload: row.report_payload as PublicAuditSharePayload,
+    publishedAt: row.published_at,
+    expiresAt: row.expires_at
+  }
+}
+
+function isDuplicateShareId(error: any): boolean {
+  return String(error?.message || '').toLowerCase().includes('duplicate') || error?.code === '23505'
+}
+
+export async function createPublicAuditShare(report: AuditReport): Promise<{ shareId: string; publicUrl: string; frontendUrl?: string }> {
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    const shareId = createShareId()
+    const payload = toPublicAuditSharePayload(shareId, report)
+    const metadata = buildShareMetadata(payload)
+
+    const { error } = await supabase.from(TABLE_NAME).insert({
+      share_id: shareId,
+      title: metadata.title,
+      description: metadata.description,
+      og_image_url: metadata.imageUrl,
+      report_payload: payload
+    })
+
+    if (!error) {
+      return {
+        shareId,
+        publicUrl: metadata.canonicalUrl,
+        frontendUrl: buildFrontendShareUrl(shareId)
+      }
+    }
+
+    if (!isDuplicateShareId(error)) {
+      throw new Error(`Failed to persist share report: ${error.message}`)
+    }
+  }
+
+  throw new Error('Could not allocate a unique share id after multiple attempts')
+}
+
+export async function getPublicAuditShare(shareId: string): Promise<PublicShareRecord | null> {
+  const { data, error } = await supabase
+    .from(TABLE_NAME)
+    .select('share_id, title, description, og_image_url, report_payload, published_at, expires_at')
+    .eq('share_id', shareId)
+    .single()
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null
+    }
+    throw new Error(`Failed to fetch shared report: ${error.message}`)
+  }
+
+  if (!data) {
+    return null
+  }
+
+  const row = mapRow(data)
+  if (row.expiresAt && new Date(row.expiresAt).getTime() < Date.now()) {
+    return null
+  }
+
+  return row
+}
+
+export function buildDynamicOgSvg(payload: PublicAuditSharePayload): string {
+  const amount = `$${Math.round(payload.annualEstimatedSavings).toLocaleString()}/year`
+  const subtitle = `${payload.recommendationsCount} recommendations across ${payload.toolCount} tools`
+  const topTool = `Largest cost center: ${payload.topTool.name} (${payload.topTool.percentage.toFixed(1)}%)`
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020617" />
+      <stop offset="1" stop-color="#0f172a" />
+    </linearGradient>
+    <radialGradient id="orbA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 100) rotate(45) scale(380 260)">
+      <stop stop-color="#22D3EE" stop-opacity="0.5" />
+      <stop offset="1" stop-color="#22D3EE" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="orbB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(950 90) rotate(25) scale(360 260)">
+      <stop stop-color="#818CF8" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#818CF8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#orbA)"/>
+  <rect width="1200" height="630" fill="url(#orbB)"/>
+  <rect x="56" y="56" width="1088" height="518" rx="30" fill="rgba(15,23,42,0.72)" stroke="rgba(148,163,184,0.32)"/>
+  <text x="96" y="152" fill="#67E8F9" font-size="28" font-family="Inter, Segoe UI, sans-serif" font-weight="700" letter-spacing="2">AI SPEND AUDIT</text>
+  <text x="96" y="254" fill="#F8FAFC" font-size="74" font-family="Inter, Segoe UI, sans-serif" font-weight="900">${amount}</text>
+  <text x="96" y="316" fill="#CBD5E1" font-size="40" font-family="Inter, Segoe UI, sans-serif" font-weight="700">potential annual optimization</text>
+  <text x="96" y="392" fill="#94A3B8" font-size="28" font-family="Inter, Segoe UI, sans-serif">${subtitle}</text>
+  <text x="96" y="442" fill="#94A3B8" font-size="24" font-family="Inter, Segoe UI, sans-serif">${topTool}</text>
+  <text x="96" y="528" fill="#22D3EE" font-size="24" font-family="Inter, Segoe UI, sans-serif" font-weight="700">Generated by AI Spend Audit</text>
+</svg>`
+}
+
+export function buildDynamicOgPng(payload: PublicAuditSharePayload): Buffer {
+  const svg = buildDynamicOgSvg(payload)
+  const renderer = new Resvg(svg, {
+    fitTo: {
+      mode: 'width',
+      value: 1200
+    }
+  })
+  const png = renderer.render().asPng()
+  return Buffer.from(png)
+}
+
+export function getShareCardMetadata(payload: PublicAuditSharePayload) {
+  const metadata = buildShareMetadata(payload)
+  return {
+    ...metadata,
+    imageUrl: buildOgImageUrl(payload.shareId)
+  }
+}

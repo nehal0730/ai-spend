@@ -1,12 +1,15 @@
 #!/usr/bin/env node
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') })
+
 const fs = require('fs')
 const path = require('path')
 const { Client } = require('pg')
 
 async function run() {
-  const url = process.env.DATABASE_URL
+  const url = process.env.DATABASE_URL || process.env.SUPABASE_DB_URL
   if (!url) {
-    console.error('Please set DATABASE_URL environment variable (postgres://user:pass@host:port/db)')
+    console.error('Please set DATABASE_URL (or SUPABASE_DB_URL) in backend/.env with your Postgres connection string.')
+    console.error('Example: DATABASE_URL=postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres')
     process.exit(1)
   }
 
