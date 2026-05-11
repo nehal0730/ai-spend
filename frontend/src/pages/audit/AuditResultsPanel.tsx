@@ -12,6 +12,8 @@ import {
   TrendingDown,
   Wrench
 } from 'lucide-react'
+import Card from '../../components/ui/Card'
+import Stat from '../../components/ui/Stat'
 import type { AuditReport, AuditRecommendation, RecommendationCategory } from '../../lib/audit-types'
 
 type Props = {
@@ -52,7 +54,7 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
   const meta = categoryMeta[recommendation.category]
   const Icon = meta.icon
   const steps = getImplementationSteps(recommendation.implementation)
-  const highlights = getReasoningHighlights(recommendation.reasoning)
+  const highlights = getReasoningHighlights(recommendation.reasoning).slice(0, 3)
 
   return (
     <motion.article
@@ -62,7 +64,7 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
       className="group rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-5 shadow-xl shadow-slate-950/30 backdrop-blur-xl"
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="space-y-4">
+        <div className="space-y-4 lg:flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className={`inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r ${meta.accent} px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-white shadow-lg shadow-black/20`}>
               <Icon className="h-3 w-3" />
@@ -80,24 +82,9 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
             <h3 className="text-xl font-black tracking-tight text-white">{recommendation.title}</h3>
             <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-300">{recommendation.description}</p>
           </div>
-
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 px-4 py-3">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-200">Estimated savings</p>
-              <p className="mt-1 text-lg font-black text-emerald-300">${formatMoney(recommendation.estimatedSavings)}/mo</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Risk level</p>
-              <p className="mt-1 text-lg font-black text-white capitalize">{recommendation.riskLevel}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Timeframe</p>
-              <p className="mt-1 text-lg font-black text-white capitalize">{recommendation.timeframe.replace('-', ' ')}</p>
-            </div>
-          </div>
         </div>
 
-        <div className="min-w-[220px] rounded-[1.5rem] border border-white/10 bg-white/5 p-4 lg:max-w-xs">
+        <Card className="min-w-[220px] lg:max-w-xs self-start">
           <div className="flex items-center gap-2 text-slate-300">
             <Sparkles className="h-4 w-4 text-cyan-300" />
             <p className="text-xs font-bold uppercase tracking-[0.2em]">Why this triggered</p>
@@ -110,11 +97,22 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <Stat
+          title="Estimated savings"
+          value={`$${formatMoney(recommendation.estimatedSavings)}/mo`}
+          className="border-emerald-400/15 bg-emerald-400/10"
+          compact
+        />
+        <Stat title="Risk level" value={recommendation.riskLevel} compact />
+        <Stat title="Timeframe" value={recommendation.timeframe.replace('-', ' ')} compact />
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
+        <Card>
           <div className="flex items-center gap-2 text-slate-200">
             <BarChart3 className="h-4 w-4 text-blue-300" />
             <p className="text-xs font-bold uppercase tracking-[0.2em]">Implementation</p>
@@ -127,9 +125,9 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
 
-        <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-4">
+        <Card>
           <div className="flex items-center gap-2 text-slate-200">
             <Clock3 className="h-4 w-4 text-amber-300" />
             <p className="text-xs font-bold uppercase tracking-[0.2em]">Reasoning snapshot</p>
@@ -144,7 +142,7 @@ function RecommendationCard({ recommendation, index }: { recommendation: AuditRe
                 <p key={line}>{line}</p>
               ))}
           </div>
-        </div>
+        </Card>
       </div>
     </motion.article>
   )
@@ -155,56 +153,39 @@ export default function AuditResultsPanel({ report }: Props) {
 
   return (
     <section className="rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(2,6,23,0.98))] p-5 shadow-[0_20px_70px_rgba(2,6,23,0.55)] md:p-6 lg:p-8">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-emerald-200">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            Deterministic audit complete
-          </div>
+      <div className="flex flex-col gap-5">
+        <div className="space-y-3">
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-white md:text-3xl">Audit results</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
-              The engine evaluated your spend against transparent pricing and rule-based thresholds. Every recommendation below can be traced back to an explicit calculation.
-            </p>
+            <h2 className="text-2xl font-black tracking-tight text-white md:text-3xl whitespace-nowrap">Audit results</h2>
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[440px] lg:grid-cols-3">
-          <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-200">Potential savings</p>
-            <p className="mt-1 text-2xl font-black text-emerald-300">${formatMoney(report.totalEstimatedSavings)}</p>
-            <p className="text-xs text-emerald-100/70">{savingsRate.toFixed(1)}% of current spend</p>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Rules applied</p>
-            <p className="mt-1 text-2xl font-black text-white">{report.auditMetadata.rulesApplied}</p>
-            <p className="text-xs text-slate-400">of {report.auditMetadata.rulesEvaluated} evaluated</p>
-          </div>
-          <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-200">High confidence</p>
-            <p className="mt-1 text-2xl font-black text-cyan-300">{report.auditMetadata.highConfidenceRecommendations}</p>
-            <p className="text-xs text-cyan-100/70">recommendations</p>
-          </div>
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3">
+          <Stat
+            title="Potential savings"
+            value={`$${formatMoney(report.totalEstimatedSavings)}`}
+            description={`${savingsRate.toFixed(1)}% of current spend`}
+            className="border-emerald-400/20 bg-emerald-400/10"
+          />
+          <Stat
+            title="Rules applied"
+            value={report.auditMetadata.rulesApplied}
+            description={`of ${report.auditMetadata.rulesEvaluated} evaluated`}
+          />
+          <Stat
+            title="High confidence"
+            value={report.auditMetadata.highConfidenceRecommendations}
+            description="recommendations"
+            className="border-cyan-400/20 bg-cyan-400/10"
+          />
         </div>
       </div>
 
       <div className="mt-6 grid gap-3 md:grid-cols-4">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Current spend</p>
-          <p className="mt-1 text-xl font-black text-white">${formatMoney(report.summary.currentSpend)}</p>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Cost per team member</p>
-          <p className="mt-1 text-xl font-black text-white">${report.summary.costPerTeamMember.toFixed(2)}</p>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Cost per active user</p>
-          <p className="mt-1 text-xl font-black text-white">${report.summary.costPerActiveUser.toFixed(2)}</p>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Spend concentration</p>
-          <p className="mt-1 text-xl font-black text-white capitalize">{report.summary.spendDistribution.concentration}</p>
-        </div>
+        <Stat title="Current spend" value={`$${formatMoney(report.summary.currentSpend)}`} />
+        <Stat title="Cost per team member" value={`$${report.summary.costPerTeamMember.toFixed(2)}`} />
+        <Stat title="Cost per active user" value={`$${report.summary.costPerActiveUser.toFixed(2)}`} />
+        <Stat title="Spend concentration" value={report.summary.spendDistribution.concentration} />
       </div>
 
       <div className="mt-6 space-y-4">
