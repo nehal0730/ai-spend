@@ -14,6 +14,9 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 import { fetchSharedAuditReport } from '../../lib/audit-api'
 import type { PublicAuditSharePayload, SharedAuditApiResponse } from '../../lib/audit-types'
+import EmailReportModal from '../../components/lead-capture/EmailReportModal'
+import SuccessToast from '../../components/lead-capture/SuccessToast'
+import type { LeadCaptureMode } from '../../lib/lead-capture-types'
 
 function formatMoney(value: number): string {
   return value.toLocaleString(undefined, { maximumFractionDigits: 0 })
@@ -41,12 +44,19 @@ function ShareLoadingSkeleton() {
   )
 }
 
+type ChartDatum = {
+  name: string
+  value: number
+}
+
 export default function ShareReportPage() {
   const { shareId } = useParams<{ shareId: string }>()
   const [data, setData] = useState<SharedAuditApiResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [leadCaptureMode, setLeadCaptureMode] = useState<LeadCaptureMode | null>(null)
+  const [toast, setToast] = useState<{ title: string; message: string } | null>(null)
 
   useEffect(() => {
     if (!shareId) {
@@ -87,12 +97,12 @@ export default function ShareReportPage() {
   }, [payload?.recommendations])
 
   const chartData = useMemo(() => {
-    if (!payload?.tools) return []
-    return payload.tools.map((tool) => ({
-      name: tool.name,
-      value: tool.spend,
-    }))
-  }, [payload?.tools])
+    if (!payload) return []
+
+    return Object.entries(payload.summary.spendDistribution.byCategory)
+      .map(([name, value]) => ({ name, value }))
+      .sort((left, right) => right.value - left.value)
+  }, [payload])
 
   const publishedDate = useMemo(() => {
     if (!data?.publishedAt) return ''
@@ -122,6 +132,13 @@ export default function ShareReportPage() {
     }
   }
 
+  useEffect(() => {
+    if (!toast) return
+
+    const timeout = window.setTimeout(() => setToast(null), 3000)
+    return () => window.clearTimeout(timeout)
+  }, [toast])
+
   const COLORS = ['#22d3ee', '#06b6d4', '#0891b2', '#0e7490', '#164e63', '#1e293b']
 
   return (
@@ -146,6 +163,14 @@ export default function ShareReportPage() {
                 >
                   <ClipboardCopy className="h-3.5 w-3.5" />
                   {copied ? 'Copied!' : 'Share'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLeadCaptureMode('report')}
+                  className="inline-flex items-center gap-2 rounded-lg border border-sky-400/30 bg-sky-400/10 px-3 py-1.5 text-xs font-semibold text-sky-100 transition-colors hover:bg-sky-400/20"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Email report
                 </button>
                 <Link
                   to="/audit"
@@ -272,7 +297,7 @@ export default function ShareReportPage() {
                     <ResponsiveContainer width="100%" height={280}>
                       <PieChart>
                         <Pie data={chartData} cx="50%" cy="50%" innerRadius={60} outerRadius={110} paddingAngle={2} dataKey="value">
-                          {chartData.map((_, index) => (
+                          {chartData.map((_, index: number) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
@@ -290,7 +315,7 @@ export default function ShareReportPage() {
 
                     {/* Legend */}
                     <div className="mt-4 space-y-2 md:mt-0">
-                      {chartData.map((item, index) => (
+                      {chartData.map((item: ChartDatum, index: number) => (
                         <div key={item.name} className="flex items-center gap-2">
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
                           <span className="text-xs text-slate-300">
@@ -390,13 +415,14 @@ export default function ShareReportPage() {
                       Start Free Audit
                       <ArrowRight className="h-4 w-4" />
                     </Link>
-                    <a
-                      href="mailto:consulting@credex.ai?subject=AI%20Spend%20Optimization%20Consultation"
+                    <button
+                      type="button"
+                      onClick={() => setLeadCaptureMode('contact')}
                       className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-400/50 bg-cyan-400/10 px-6 py-3 text-sm font-semibold text-cyan-100 transition-all hover:bg-cyan-400/20"
                     >
                       Talk to Specialist
                       <ExternalLink className="h-4 w-4" />
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -411,6 +437,33 @@ export default function ShareReportPage() {
           )}
         </div>
       </div>
+
+      <EmailReportModal
+        open={leadCaptureMode !== null}
+        onClose={() => setLeadCaptureMode(null)}
+        mode={leadCaptureMode || 'report'}
+        source="share_page"
+        title={leadCaptureMode === 'contact' ? 'Request a follow-up consultation' : 'Email this shared report'}
+        description={leadCaptureMode === 'contact' ? 'Tell us how we can help with rollout, negotiation, or governance.' : 'Send the shared report to your inbox so you can keep it handy or forward it.'}
+        shareId={data?.shareId}
+        reportTitle={data?.title || 'Shared AI Spend Audit report'}
+        reportUrl={window.location.href}
+        submitLabel={leadCaptureMode === 'contact' ? 'Request consultation' : 'Email report'}
+        onSuccess={(message) => {
+          setToast({
+            title: leadCaptureMode === 'contact' ? 'Consultation request sent' : 'Report email requested',
+            message
+          })
+          setLeadCaptureMode(null)
+        }}
+      />
+
+      <SuccessToast
+        open={toast !== null}
+        title={toast?.title || ''}
+        message={toast?.message || ''}
+        onClose={() => setToast(null)}
+      />
     </main>
   )
 }

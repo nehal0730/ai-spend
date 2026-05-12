@@ -93,6 +93,14 @@ create table if not exists public_reports (
   constraint public_reports_share_token_hash_unique unique (share_token_hash)
 );
 
-alter table lead_capture_emails
-  add constraint lead_capture_emails_report_id_fkey
-  foreign key (report_id) references public_reports(id) on delete set null;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'lead_capture_emails_report_id_fkey'
+  ) THEN
+    ALTER TABLE lead_capture_emails
+      ADD CONSTRAINT lead_capture_emails_report_id_fkey
+      FOREIGN KEY (report_id) REFERENCES public_reports(id) ON DELETE SET NULL;
+  END IF;
+END
+$$;

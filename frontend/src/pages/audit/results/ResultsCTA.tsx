@@ -4,18 +4,50 @@ import type { AuditReport } from '../../../lib/audit-types'
 
 type Props = {
   report: AuditReport
+  onRequestEmail?: () => void
+  onRequestConsultation?: () => void
 }
 
 function formatMoney(amount: number): string {
   return amount.toLocaleString(undefined, { maximumFractionDigits: 2 })
 }
 
-export default function ResultsCTA({ report }: Props) {
+export default function ResultsCTA({ report, onRequestEmail, onRequestConsultation }: Props) {
   const monthlySavings = report.totalEstimatedSavings
   const annualSavings = monthlySavings * 12
   const savingsRate = report.summary.currentSpend > 0 ? (monthlySavings / report.summary.currentSpend) * 100 : 0
   const shouldEscalate = annualSavings >= 10000 || savingsRate >= 20
   const isLowSavings = annualSavings < 3000 || report.recommendations.length === 0
+
+  const renderLeadActions = () => {
+    if (!onRequestEmail && !onRequestConsultation) {
+      return null
+    }
+
+    return (
+      <div className="relative mt-5 flex flex-col gap-3 sm:flex-row">
+        {onRequestEmail ? (
+          <button
+            type="button"
+            onClick={onRequestEmail}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-primary transition-all hover:-translate-y-0.5 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:focus-visible:ring-offset-slate-950"
+          >
+            Email me this report
+          </button>
+        ) : null}
+        {onRequestConsultation ? (
+          <button
+            type="button"
+            onClick={onRequestConsultation}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:focus-visible:ring-offset-slate-950"
+          >
+            Book a consultation
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        ) : null}
+      </div>
+    )
+  }
 
   if (shouldEscalate) {
     return (
@@ -46,17 +78,30 @@ export default function ResultsCTA({ report }: Props) {
         </div>
 
         <div className="relative mt-5 grid gap-3 sm:grid-cols-2">
-          <a
-            href="mailto:consulting@credex.ai?subject=Credex%20AI%20Spend%20Consultation"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:focus-visible:ring-offset-slate-950"
-          >
-            Book Credex consultation
-            <ArrowRight className="h-4 w-4" />
-          </a>
+          {onRequestConsultation ? (
+            <button
+              type="button"
+              onClick={onRequestConsultation}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:focus-visible:ring-offset-slate-950"
+            >
+              Book Credex consultation
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <a
+              href="mailto:consulting@credex.ai?subject=Credex%20AI%20Spend%20Consultation"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:focus-visible:ring-offset-slate-950"
+            >
+              Book Credex consultation
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          )}
           <div className="rounded-xl border border-surface bg-white px-4 py-3 text-sm text-muted dark:bg-white/5 dark:text-slate-300">
             Recommended when annual savings exceed $10k or the audit rate is above 20%.
           </div>
         </div>
+
+        {renderLeadActions()}
       </section>
     )
   }
@@ -76,6 +121,8 @@ export default function ResultsCTA({ report }: Props) {
         <div className="relative mt-4 rounded-xl border border-surface bg-white px-4 py-3 text-sm text-muted dark:bg-white/5 dark:text-slate-300">
           Best next move: keep this page bookmarked and rerun the audit when seat count, vendor mix, or usage changes.
         </div>
+
+        {renderLeadActions()}
       </section>
     )
   }

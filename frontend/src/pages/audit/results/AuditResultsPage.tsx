@@ -8,6 +8,9 @@ import ResultsHero from './ResultsHero'
 import ResultsCTA from './ResultsCTA'
 import ToolBreakdownGrid from './ToolBreakdownGrid'
 import Card from '../../../components/ui/Card'
+import EmailReportModal from '../../../components/lead-capture/EmailReportModal'
+import SuccessToast from '../../../components/lead-capture/SuccessToast'
+import type { LeadCaptureMode } from '../../../lib/lead-capture-types'
 
 function formatMoney(amount: number): string {
   return amount.toLocaleString(undefined, { maximumFractionDigits: 2 })
@@ -17,6 +20,8 @@ export default function AuditResultsPage() {
   const report = useAuditResultsStore((state) => state.latestReport)
   const latestShare = useAuditResultsStore((state) => state.latestShare)
   const [copyState, setCopyState] = useState<'idle' | 'copied'>('idle')
+  const [leadCaptureMode, setLeadCaptureMode] = useState<LeadCaptureMode | null>(null)
+  const [toast, setToast] = useState<{ title: string; message: string } | null>(null)
   const [aiSummary, setAiSummary] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiFallback, setAiFallback] = useState(false)
@@ -29,6 +34,14 @@ export default function AuditResultsPage() {
   }, [latestShare?.frontendUrl, latestShare?.publicUrl])
   const generatedOn = report ? new Date(report.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
   const topToolShare = report?.summary.topExpensiveTool.percentage ?? 0
+  const reportTitle = report ? `AI Spend Audit report for ${report.input.currentPlan} teams` : 'AI Spend Audit report'
+
+  useEffect(() => {
+    if (!toast) return
+
+    const timeout = window.setTimeout(() => setToast(null), 3000)
+    return () => window.clearTimeout(timeout)
+  }, [toast])
 
   useEffect(() => {
     let mounted = true
@@ -175,13 +188,14 @@ export default function AuditResultsPage() {
                     </button>
                   </div>
                 </div>
-                <a
-                  href="mailto:consulting@credex.ai?subject=Credex%20AI%20Spend%20Consultation"
+                <button
+                  type="button"
+                  onClick={() => setLeadCaptureMode('contact')}
                   className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-500 px-4 py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 dark:focus-visible:ring-offset-slate-950"
                 >
                   <ExternalLink className="h-4 w-4" />
-                  Book a Credex consultation
-                </a>
+                  Book a consultation
+                </button>
               </Card>
             </div>
 
@@ -218,7 +232,11 @@ export default function AuditResultsPage() {
                 </div>
               </Card>
 
-              <ResultsCTA report={report} />
+              <ResultsCTA
+                report={report}
+                onRequestEmail={() => setLeadCaptureMode('report')}
+                onRequestConsultation={() => setLeadCaptureMode('contact')}
+              />
 
               <div>
                 <ToolBreakdownGrid report={report} />
@@ -227,6 +245,33 @@ export default function AuditResultsPage() {
           </div>
         </div>
       </section>
+
+      <EmailReportModal
+        open={leadCaptureMode !== null}
+        onClose={() => setLeadCaptureMode(null)}
+        mode={leadCaptureMode || 'report'}
+        source="audit_results"
+        title={leadCaptureMode === 'contact' ? 'Request a follow-up consultation' : 'Email me this audit report'}
+        description={leadCaptureMode === 'contact' ? 'Tell us what you want help with and we will follow up with practical next steps.' : 'Send the report to your inbox so you can share it with your team or keep it handy.'}
+        shareId={latestShare?.shareId}
+        reportTitle={reportTitle}
+        reportUrl={resultsUrl}
+        submitLabel={leadCaptureMode === 'contact' ? 'Request consultation' : 'Email report'}
+        onSuccess={(message) => {
+          setToast({
+            title: leadCaptureMode === 'contact' ? 'Consultation request sent' : 'Report email requested',
+            message
+          })
+          setLeadCaptureMode(null)
+        }}
+      />
+
+      <SuccessToast
+        open={toast !== null}
+        title={toast?.title || ''}
+        message={toast?.message || ''}
+        onClose={() => setToast(null)}
+      />
     </main>
   )
 }

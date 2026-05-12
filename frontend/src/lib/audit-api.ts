@@ -1,13 +1,10 @@
 import type { AnalyzeAuditResponse, SharedAuditApiResponse } from './audit-types'
+import { getApiBaseUrl } from './api-base'
 import type { AISpendFormValues } from './spend-form'
 
 type ApiError = {
   error: string
   issues?: Array<{ message: string }>
-}
-
-function getApiBaseUrl(): string {
-  return import.meta.env.VITE_API_URL || 'http://localhost:5000'
 }
 
 export async function runRemoteAudit(formData: AISpendFormValues): Promise<{ success: true; data: AnalyzeAuditResponse } | { success: false; error: string }> {
