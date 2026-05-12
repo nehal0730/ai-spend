@@ -10,3 +10,15 @@ tmp_*
 .env.production.local
 !.env.example
 scripts/
+.idea
+.vscode
+.DS_Store
+
+# Caches
+.cache
+.parcel-cache
+
+# Debug / logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

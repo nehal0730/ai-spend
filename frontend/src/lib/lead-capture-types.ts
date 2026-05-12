@@ -43,6 +43,7 @@ const emailSchema = z.string().trim().email('Enter a valid email address').trans
 const optionalText = (maxLength: number) =>
   z.preprocess((value) => {
     if (typeof value !== 'string') return undefined
+    // eslint-disable-next-line no-control-regex
     const normalized = value.replace(/\u0000/g, '').trim()
     return normalized.length > 0 ? normalized : undefined
   }, z.string().max(maxLength).optional())

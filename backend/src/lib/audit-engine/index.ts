@@ -46,10 +46,10 @@ export class RuleBasedAuditEngine {
 
     recommendations.sort((left, right) => (left.priority !== right.priority ? left.priority - right.priority : right.estimatedSavings - left.estimatedSavings))
 
-    // Sanity check: savings cannot exceed 100% of current monthly spend
-    const maxSavings = input.monthlySpend * 1.0 // 100% absolute maximum
-    const cappedSavings = Math.min(totalSavings, maxSavings)
-    
+    // Sanity check: savings cannot exceed 100% of current monthly spend and cannot be negative
+    const maxSavings = Math.max(0, input.monthlySpend * 1.0) // 100% absolute maximum
+    const cappedSavings = Math.min(Math.max(0, totalSavings), maxSavings)
+
     if (cappedSavings < totalSavings) {
       console.warn(`[Audit Engine] Calculated savings $${totalSavings.toFixed(2)} exceeds 100% of spend. Capping at $${cappedSavings.toFixed(2)}`)
     }

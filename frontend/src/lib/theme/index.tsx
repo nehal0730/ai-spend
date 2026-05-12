@@ -19,7 +19,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     else root.classList.remove('dark')
     try {
       localStorage.setItem('theme', theme)
-    } catch {}
+    } catch (_error) {
+      // Silently ignore localStorage errors (e.g., in private browsing)
+    }
   }, [theme])
 
   function toggle() {

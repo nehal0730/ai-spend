@@ -1,6 +1,6 @@
 ﻿import React, { useMemo, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, CalendarDays, Copy, ExternalLink, ShieldCheck, Sparkles, Zap } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Copy, ExternalLink, Sparkles, Zap } from 'lucide-react'
 import AuditResultsPanel from '../AuditResultsPanel'
 import { useAuditResultsStore } from '../../../lib/audit-results-store'
 import ResultsEmptyState from './ResultsEmptyState'
