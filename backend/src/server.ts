@@ -18,8 +18,29 @@ const app = express()
 app.set('trust proxy', 1)
 
 app.use(helmet())
+const configuredCorsOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((value) => value.trim()).filter(Boolean)
+  : []
+const localDevOriginPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/
 app.use(cors({
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map((value) => value.trim()).filter(Boolean) : true,
+  origin: (origin, callback) => {
+    if (!origin) {
+      callback(null, true)
+      return
+    }
+
+    if (configuredCorsOrigins.includes(origin)) {
+      callback(null, true)
+      return
+    }
+
+    if (process.env.NODE_ENV !== 'production' && localDevOriginPattern.test(origin)) {
+      callback(null, true)
+      return
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`), false)
+  },
   credentials: true
 }))
 app.use(json())

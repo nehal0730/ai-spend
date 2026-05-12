@@ -12,14 +12,15 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-6">
           <nav className="hidden md:flex gap-8 text-sm">
-            <a href="#features" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Features</a>
-            <a href="#how-it-works" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">How it works</a>
-            <a href="#faq" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</a>
+            <Link to="/#features" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Features</Link>
+            <Link to="/#how-it-works" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">How it works</Link>
+            <Link to="/#faq" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQ</Link>
+            <Link to="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</Link>
           </nav>
           <div className="flex items-center gap-3">
-            <button className="hidden sm:flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-900/20">
+            <Link to="/sign-in" className="hidden sm:flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-900/20">
               Sign in
-            </button>
+            </Link>
             <Link to="/audit" className="hidden sm:flex items-center gap-1 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:from-cyan-600 hover:to-indigo-600">
               Get Started
               <ChevronRight size={16} />

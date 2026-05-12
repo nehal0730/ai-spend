@@ -91,7 +91,7 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
 
 export default function FAQ() {
   return (
-    <section className="bg-gradient-to-b from-white to-slate-50 py-16 md:py-24 lg:py-32 dark:from-slate-900 dark:to-slate-800">
+    <section id="faq" className="bg-gradient-to-b from-white to-slate-50 py-16 md:py-24 lg:py-32 dark:from-slate-900 dark:to-slate-800">
       <div className="container px-4 md:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
