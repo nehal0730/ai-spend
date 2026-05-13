@@ -17,8 +17,6 @@ services:
         fromSecret: SUPABASE_URL
       - key: SUPABASE_SERVICE_ROLE_KEY
         fromSecret: SUPABASE_SERVICE_ROLE_KEY
-      - key: RESEND_API_KEY
-        fromSecret: RESEND_API_KEY
       - key: FRONTEND_BASE_URL
         value: https://your-frontend-on-render
       - key: CORS_ORIGIN

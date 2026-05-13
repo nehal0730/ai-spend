@@ -4,11 +4,11 @@ AI Spend Audit is a deterministic audit tool for teams that buy too many AI subs
 
 It is for early-stage teams with fragmented spending: company cards, reimbursements, personal plans, and tools that stay alive because nobody wants the cancellation argument.
 
-## Screenshots / recording
+## Recording
 
-1. Audit input form
-2. Results page with recommendations
-3. Share page / lead capture flow
+https://www.loom.com/share/a0cdea94423e418d83c6cdee0673ad01
+
+![Summary generated using AI(Gemini_API used)](image.png)
 
 ## Quick start
 
@@ -59,5 +59,5 @@ Deploy the backend to a Node host and the frontend `dist/` folder to static host
 5. Optional AI summary with fallback text: narrative polish is useful, but the product cannot depend on it.
 
 ## Deployed URL
-
-Not deployed yet.
+https://ai-spend-frontend.onrender.com
+(Backend: https://ai-spend-backend-equy.onrender.com)
