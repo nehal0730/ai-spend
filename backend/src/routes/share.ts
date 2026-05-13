@@ -11,6 +11,21 @@ import {
 
 const shareIdSchema = z.string().min(8).max(64).regex(/^[A-Za-z0-9_-]+$/)
 
+function isUsableFrontendUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value)
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false
+
+    const host = parsed.hostname.toLowerCase()
+    if (host === 'localhost' || host === '127.0.0.1') return false
+    if (host.endsWith('.local') || host.includes('placeholder')) return false
+
+    return true
+  } catch {
+    return false
+  }
+}
+
 function parseShareId(value: string): string | null {
   const parsed = shareIdSchema.safeParse(value)
   return parsed.success ? parsed.data : null
@@ -101,13 +116,14 @@ pageRouter.get('/:shareId', async (req, res) => {
     if (!isCrawlerRequest(req)) {
       const frontendUrl = buildFrontendShareUrl(shareId)
       const currentUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`
-      if (frontendUrl !== currentUrl) {
+      if (isUsableFrontendUrl(frontendUrl) && frontendUrl !== currentUrl) {
         return res.redirect(302, frontendUrl)
       }
     }
 
     const metadata = getShareCardMetadata(share.reportPayload)
-    const html = renderShareHtml(metadata, share.reportPayload)
+    const frontendUrl = buildFrontendShareUrl(shareId)
+    const html = renderShareHtml(metadata, share.reportPayload, isUsableFrontendUrl(frontendUrl) ? frontendUrl : null)
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
     res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400')
     return res.send(html)

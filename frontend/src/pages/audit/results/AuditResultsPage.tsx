@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowLeft, CalendarDays, Copy, ExternalLink, Sparkles, Zap } from 'lucide-react'
 import AuditResultsPanel from '../AuditResultsPanel'
 import { useAuditResultsStore } from '../../../lib/audit-results-store'
+import { getApiBaseUrl } from '../../../lib/api-base'
 import ResultsEmptyState from './ResultsEmptyState'
 import ResultsHero from './ResultsHero'
 import ResultsCTA from './ResultsCTA'
@@ -14,6 +15,33 @@ import type { LeadCaptureMode } from '../../../lib/lead-capture-types'
 
 function formatMoney(amount: number): string {
   return amount.toLocaleString(undefined, { maximumFractionDigits: 2 })
+}
+
+function isUsableShareUrl(value?: string | null): value is string {
+  if (!value) return false
+
+  try {
+    const parsed = new URL(value)
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false
+
+    const host = parsed.hostname.toLowerCase()
+    if (host === 'localhost' || host === '127.0.0.1') return false
+    if (host.endsWith('.local') || host.includes('placeholder')) return false
+
+    return true
+  } catch {
+    return false
+  }
+}
+
+function buildFallbackShareUrl(shareId: string): string {
+  const encodedShareId = encodeURIComponent(shareId)
+
+  try {
+    return `${new URL(getApiBaseUrl()).origin}/share/${encodedShareId}`
+  } catch {
+    return `${window.location.origin}/share/${encodedShareId}`
+  }
 }
 
 export default function AuditResultsPage() {
@@ -28,10 +56,11 @@ export default function AuditResultsPage() {
   const [aiError, setAiError] = useState<string | null>(null)
 
   const resultsUrl = useMemo(() => {
-    if (latestShare?.frontendUrl) return latestShare.frontendUrl
-    if (latestShare?.publicUrl) return latestShare.publicUrl
+    if (isUsableShareUrl(latestShare?.publicUrl)) return latestShare.publicUrl
+    if (isUsableShareUrl(latestShare?.frontendUrl)) return latestShare.frontendUrl
+    if (latestShare?.shareId) return buildFallbackShareUrl(latestShare.shareId)
     return `${window.location.origin}/audit/results`
-  }, [latestShare?.frontendUrl, latestShare?.publicUrl])
+  }, [latestShare?.frontendUrl, latestShare?.publicUrl, latestShare?.shareId])
   const generatedOn = report ? new Date(report.timestamp).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
   const topToolShare = report?.summary.topExpensiveTool.percentage ?? 0
   const reportTitle = report ? `AI Spend Audit report for ${report.input.currentPlan} teams` : 'AI Spend Audit report'
