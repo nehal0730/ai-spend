@@ -47,6 +47,7 @@ function ShareLoadingSkeleton() {
 type ChartDatum = {
   name: string
   value: number
+  meta?: string
 }
 
 export default function ShareReportPage() {
@@ -99,10 +100,16 @@ export default function ShareReportPage() {
   const chartData = useMemo(() => {
     if (!payload) return []
 
-    return Object.entries(payload.summary.spendDistribution.byCategory)
-      .map(([name, value]) => ({ name, value }))
+    return payload.tools
+      .map((tool) => ({
+        name: tool.toolName,
+        value: Number(tool.monthlySpend || 0),
+        meta: [tool.provider, tool.plan].filter(Boolean).join(' · ')
+      }))
       .sort((left, right) => right.value - left.value)
   }, [payload])
+
+  const totalToolSpend = useMemo(() => chartData.reduce((sum, item) => sum + item.value, 0), [chartData])
 
   const publishedDate = useMemo(() => {
     if (!data?.publishedAt) return ''
@@ -285,8 +292,34 @@ export default function ShareReportPage() {
                 </div>
               </div>
 
+              {/* Tools list with plans */}
+              {payload.tools && payload.tools.length > 0 && (
+                <div className="rounded-2xl border border-slate-700/50 bg-slate-800/30 p-6 backdrop-blur-xl">
+                  <h2 className="flex items-center gap-2 text-sm font-bold text-white">
+                    <Lightbulb className="h-4 w-4 text-cyan-400" />
+                    Tools analyzed (plans shown when provided)
+                  </h2>
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    {payload.tools.map((t: any, idx: number) => (
+                      <div key={`${t.toolName}-${idx}`} className="rounded-xl border border-slate-700/40 bg-slate-900/10 p-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-semibold text-white">{t.toolName}</p>
+                            <p className="mt-0.5 text-xs text-slate-400">{t.provider}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-emerald-400">${(Math.round(t.monthlySpend || 0)).toLocaleString()}</p>
+                            <p className="text-xs text-slate-400">{t.plan ? t.plan : `${t.activeSeats} seat(s)`}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Spend Distribution - Chart Section */}
-              {chartData.length > 0 && (
+              {chartData.length > 0 && totalToolSpend > 0 && (
                 <div className="rounded-2xl border border-slate-700/50 bg-slate-800/30 p-6 backdrop-blur-xl">
                   <h2 className="flex items-center gap-2 text-sm font-bold text-white">
                     <Lightbulb className="h-4 w-4 text-cyan-400" />
@@ -320,10 +353,23 @@ export default function ShareReportPage() {
                           <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
                           <span className="text-xs text-slate-300">
                             {item.name}: <span className="font-semibold text-white">${formatMoney(item.value)}/mo</span>
+                            {item.meta ? <span className="text-slate-400"> · {item.meta}</span> : null}
                           </span>
                         </div>
                       ))}
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {chartData.length > 0 && totalToolSpend === 0 && (
+                <div className="rounded-2xl border border-slate-700/50 bg-slate-800/30 p-6 backdrop-blur-xl">
+                  <h2 className="flex items-center gap-2 text-sm font-bold text-white">
+                    <Lightbulb className="h-4 w-4 text-cyan-400" />
+                    Your spending by tool
+                  </h2>
+                  <div className="mt-4 rounded-xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">
+                    No monthly spend was provided for the tools in this report, so the chart is empty. Update the inputs to see a real breakdown.
                   </div>
                 </div>
               )}

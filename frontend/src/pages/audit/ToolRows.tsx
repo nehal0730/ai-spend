@@ -68,7 +68,7 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                 </button>
               </div>
 
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
                 <FormField
                   id={`tools.${index}.provider`}
                   label={<div className="flex items-center gap-2"><Zap className="h-4 w-4 text-blue-400" />Provider</div>}
@@ -108,6 +108,26 @@ export default function ToolRows({ control, errors, fields, append, remove, upda
                         type="text"
                         className="block w-full rounded-xl border border-surface bg-white text-primary shadow-sm focus:border-cyan-500 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
                         placeholder="e.g. GPT-4.1, Claude Code"
+                      />
+                    )}
+                  />
+                </FormField>
+
+                <FormField
+                  id={`tools.${index}.plan`}
+                  label={<div className="flex items-center gap-2"><Tag className="h-4 w-4 text-amber-400" />Plan / Tier</div>}
+                  error={getToolErrorMessage(rowErrors?.plan)}
+                >
+                  <Controller
+                    control={control}
+                    name={`tools.${index}.plan` as any}
+                    render={({ field: planField }) => (
+                      <input
+                        {...planField}
+                        id={`tools.${index}.plan`}
+                        type="text"
+                        className="block w-full rounded-xl border border-surface bg-white text-primary shadow-sm focus:border-cyan-500 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        placeholder="e.g. Pro, Team, API"
                       />
                     )}
                   />

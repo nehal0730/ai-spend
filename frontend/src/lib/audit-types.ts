@@ -11,6 +11,7 @@ export type RecommendationCategory =
 export interface AuditTool {
   provider: string
   toolName: string
+  plan?: string
   monthlySpend: number
   activeSeats: number
 }
@@ -110,6 +111,13 @@ export interface PublicAuditSharePayload {
     spend: number
     percentage: number
   }
+  tools: Array<{
+    provider: string
+    toolName: string
+    plan?: string
+    monthlySpend: number
+    activeSeats: number
+  }>
   summary: AuditSummary
   recommendations: PublicRecommendation[]
 }

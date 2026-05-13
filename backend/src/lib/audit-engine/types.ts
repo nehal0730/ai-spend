@@ -11,6 +11,7 @@ export type RecommendationCategory =
 export interface AuditTool {
   provider: string
   toolName: string
+  plan?: string
   monthlySpend: number
   activeSeats: number
 }

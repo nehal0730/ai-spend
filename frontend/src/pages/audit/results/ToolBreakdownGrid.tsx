@@ -46,6 +46,9 @@ export default function ToolBreakdownGrid({ report }: Props) {
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-200">{tool.provider}</p>
                   <h3 className="mt-1 text-base font-bold tracking-tight text-primary dark:text-white">{tool.toolName}</h3>
+                  <p className="mt-1 text-xs font-medium text-muted dark:text-slate-400">
+                    {tool.plan ? `Plan: ${tool.plan}` : 'Plan not captured'}
+                  </p>
                 </div>
                 <div className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] ${isTopTool ? 'border border-amber-400/20 bg-amber-400/10 text-amber-700 dark:text-amber-100' : 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-700 dark:text-emerald-200'}`}>
                   {shareLabel}

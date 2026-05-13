@@ -131,5 +131,3 @@ create table if not exists public.test_audits (
 ```
 
 This single table is intentionally small and safe for smoke-testing your backend-to-database flow.
-
-

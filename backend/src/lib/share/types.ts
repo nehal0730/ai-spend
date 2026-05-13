@@ -31,6 +31,7 @@ export interface PublicAuditSharePayload {
     spend: number
     percentage: number
   }
+  tools: Array<{ provider: string; toolName: string; monthlySpend: number; activeSeats: number; plan?: string }>
   summary: AuditReport['summary']
   recommendations: PublicRecommendation[]
 }

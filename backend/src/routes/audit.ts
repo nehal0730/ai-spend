@@ -7,6 +7,7 @@ import { createPublicAuditShare } from '../lib/share/service'
 
 const toolSchema = z.object({
   provider: z.string().min(1),
+  plan: z.string().optional(),
   toolName: z.string().min(1),
   monthlySpend: z.number().min(0),
   activeSeats: z.number().int().min(1)

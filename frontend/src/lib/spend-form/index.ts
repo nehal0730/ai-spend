@@ -2,8 +2,14 @@ import { z } from 'zod'
 
 export const aiToolProviders = [
   'OpenAI',
+  'ChatGPT',
   'Anthropic',
+  'Claude',
   'Google AI',
+  'Gemini',
+  'Cursor',
+  'GitHub Copilot',
+  'Windsurf',
   'Azure OpenAI',
   'Cohere',
   'Replicate',
@@ -58,6 +64,7 @@ export type AiToolProvider = (typeof aiToolProviders)[number]
 export type ToolRow = {
   id: string
   provider: AiToolProvider
+  plan?: string
   toolName: string
   monthlySpend: number
   activeSeats: number
@@ -75,6 +82,7 @@ export type AISpendFormValues = {
 const toolRowSchema = z.object({
   id: z.string().min(1),
   provider: z.enum(aiToolProviders),
+  plan: z.string().optional(),
   toolName: z.string().min(2, 'Tool name is required'),
   monthlySpend: z.coerce.number().min(0, 'Monthly spend must be 0 or greater'),
   activeSeats: z.coerce.number().int().min(1, 'Active seats must be at least 1')
@@ -92,6 +100,7 @@ export const aiSpendFormSchema = z.object({
 export const defaultToolRow = (provider: AiToolProvider = 'OpenAI'): ToolRow => ({
   id: globalThis.crypto?.randomUUID?.() ?? `tool-${Date.now()}-${Math.random().toString(16).slice(2)}`,
   provider,
+  plan: '',
   toolName: provider,
   monthlySpend: 0,
   activeSeats: 1

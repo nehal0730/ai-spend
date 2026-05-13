@@ -53,6 +53,7 @@ export function toPublicAuditSharePayload(shareId: string, report: AuditReport):
       spend: topTool.spend,
       percentage: topTool.percentage
     },
+    tools: report.input.tools.map((t) => ({ provider: t.provider, toolName: t.toolName, monthlySpend: t.monthlySpend, activeSeats: t.activeSeats, plan: (t as any).plan })) ,
     summary: report.summary,
     recommendations: report.recommendations.map(toPublicRecommendation)
   }

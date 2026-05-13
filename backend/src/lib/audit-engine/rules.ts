@@ -128,11 +128,14 @@ export const PLAN_OPTIMIZATION: FinancialRule = {
       const pricing = getPricingConfig(tool.provider)
       if (!pricing) continue
 
-      const expectedCost = calculateExpectedCost(pricing, input.seatCount)
+      // Prefer per-tool active seats when available, fallback to org seatCount
+      const seatsForTool = Math.max(1, tool.activeSeats || input.seatCount)
+      const expectedCost = calculateExpectedCost(pricing, seatsForTool)
       const overpay = calculateOverpayment(tool.monthlySpend, expectedCost)
 
       if (overpay.percentage > 20) {
-        recommendation = `${tool.toolName}: Negotiate down to $${expectedCost.toFixed(2)}/month (now $${tool.monthlySpend})`
+        const reportedPlan = tool.plan ? ` reported plan: ${tool.plan}` : ''
+        recommendation = `${tool.toolName}${reportedPlan}: negotiate to ~$${expectedCost.toFixed(2)}/month for ${seatsForTool} seat(s) (currently $${tool.monthlySpend})`
         bestSavings += overpay.amount
       }
     }
