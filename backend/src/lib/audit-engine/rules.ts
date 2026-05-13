@@ -1,4 +1,4 @@
-import { AuditInput, FinancialRule, RuleResult } from './types'
+import { FinancialRule, RuleResult } from './types'
 import { AUDIT_THRESHOLDS, calculateExpectedCost, calculateOverpayment, getPricingConfig } from './pricing'
 import { calculateAuditSummary, assessTeamSizeAdequacy, findOverlappingTools } from './calculations'
 

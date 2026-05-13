@@ -1,0 +1,35 @@
+# Render manifest to deploy frontend (static) and backend (web service).
+# Update secrets/env values in the Render dashboard or replace placeholders below.
+services:
+  - type: web
+    name: ai-spend-backend
+    env: node
+    branch: main
+    buildCommand: cd backend && npm ci && npm run build
+    startCommand: cd backend && npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: SUPABASE_URL
+        fromSecret: SUPABASE_URL
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromSecret: SUPABASE_SERVICE_ROLE_KEY
+      - key: RESEND_API_KEY
+        fromSecret: RESEND_API_KEY
+      - key: FRONTEND_BASE_URL
+        value: https://your-frontend-on-render
+      - key: CORS_ORIGIN
+        value: https://your-frontend-on-render
+      - key: GEMINI_API_KEY
+        fromSecret: GEMINI_API_KEY
+      - key: GEMINI_API_URL
+        value: ""
+
+  - type: static
+    name: ai-spend-frontend
+    branch: main
+    buildCommand: cd frontend && npm ci && npm run build
+    publishPath: frontend/dist

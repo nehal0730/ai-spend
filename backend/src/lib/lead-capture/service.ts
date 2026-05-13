@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from 'crypto'
+import { createHash } from 'crypto'
 import supabase from '../supabase'
 import logger from '../../utils/logger'
 import { getOptionalEnv } from '../env'
@@ -23,13 +23,7 @@ const LEADS_TABLE = 'leads'
 const REPORT_REQUESTS_TABLE = 'report_requests'
 const EMAIL_EVENTS_TABLE = 'email_events'
 
-function hashValue(value: string | null): string | null {
-  if (!value) {
-    return null
-  }
-
-  return createHash('sha256').update(value).digest('hex')
-}
+// previously defined hashValue was removed because it was unused
 
 function buildDedupeKey(input: {
   email: string
