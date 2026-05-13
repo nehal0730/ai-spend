@@ -47,4 +47,3 @@
 **What I did:** Continued polishing the results and share UI, including plan metadata handling and the hero presentation.
 **What I learned:** The report reads better when the plan/tier context survives into the share view and results summary.
 **Blockers / what I'm stuck on:** The hardest part was making the hero summary feel polished without losing the actual savings logic.
-**Plan for tomorrow:** Finish the visual cleanup and validate the full audit-to-share flow.

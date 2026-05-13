@@ -78,7 +78,7 @@ export default function AuditResultsPage() {
       setAiLoading(true)
       setAiError(null)
       try {
-        const resp = await fetch('/audit/summary', {
+        const resp = await fetch(`${getApiBaseUrl()}/audit/summary`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(report)
@@ -187,7 +187,7 @@ export default function AuditResultsPage() {
                         setAiLoading(true)
                         setAiError(null)
                         try {
-                          const resp = await fetch('/audit/summary', {
+                          const resp = await fetch(`${getApiBaseUrl()}/audit/summary`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(report)
